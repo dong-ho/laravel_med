@@ -14,18 +14,29 @@ jobs:
         uses: actions/checkout@v4
         #  GitHub Actions 빌드 서버에 현재 저장소 코드를 가져옴
 
+      # Github Action 가상 서버 접속
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
         #  GitHub Secrets 에서 SSH 키를 가져와 SSH 접속을 위한 설정 진행
 
+      # SSH 접근이 정상인지 체크 할때만 사용 정상작동시 주석처리
+      - name: Debug SSH
+        run: |
+          ls -lah ~/.ssh
+          cat ~/.ssh/id_rsa | head -n 5
+          ssh -i ~/.ssh/id_rsa -T ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+
+      # 오라클 서버에 등록
       - name: Deploy to Oracle Cloud
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /home/프로젝트명  #  Laravel 프로젝트 폴더로 이동
+            cd /home/laravel_med  #  Laravel 프로젝트 폴더로 이동
 
             echo "Updating application..."
             git pull origin main  #  최신 코드 가져오기
