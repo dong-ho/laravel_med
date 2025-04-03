@@ -41,13 +41,11 @@ jobs:
             echo "Remote Git check...."
             if [ ! -d "/home/laravel_med/.git" ]; then
               echo "Git repository not found! Cloning repository..."
-              # rm -rf /home/laravel_med
-              git clone git@github.com:dong-ho/laravel_med.git /home/laravel_med
+              git init
+              git remote add origin git@github.com:dong-ho/laravel_med.git
+              git fetch origin
+              git reset --hard origin/main
             fi
-
-            git reset --hard  # 안전하게 업데이트
-
-
             echo "Updating application..."
             git pull origin main  #  최신 코드 가져오기
 
