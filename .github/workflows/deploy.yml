@@ -25,7 +25,6 @@ jobs:
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
         #  GitHub Secrets 에서 SSH 키를 가져와 SSH 접속을 위한 설정 진행
 
-
       # 오라클 서버에 등록
       - name: Deploy to Oracle Cloud
         run: |
