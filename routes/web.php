@@ -10,7 +10,6 @@ use App\Http\Controllers\Agent\AgentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
-debug("etst");
 
 Route::get('/',[UserController::class,'UserIndex'])->name('user.index');
 
