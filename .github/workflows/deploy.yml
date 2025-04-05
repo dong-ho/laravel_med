@@ -31,36 +31,36 @@ jobs:
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /home/laravel_med  #  Laravel 프로젝트 폴더로 이동
 
-            echo "Updating application..."
+            echo "****** Updating application..."
             git pull origin main  #  최신 코드 가져오기
 
-            echo " env file create....."
+            echo "****** .env file create....."
             echo "${{ secrets.ENV_FILE_PROD }}" > .env #  .env File 생성
 
-            # echo "Installing PHP dependencies..."
+            # echo "****** Installing PHP dependencies..."
             # composer install --no-dev --optimize-autoloader  # PHP 패키지 설치
 
-            # echo "Installing Node.js dependencies…" #node
+            # echo "****** Installing Node.js dependencies…" #node
             # npm install  #  JavaScript 패키지 설치
             # npm run build  #  프론트엔드 빌드
 
-            echo "Setting permissions for storage and cache..."
+            echo "****** Setting permissions for storage and cache..."
             sudo chown -R www-data:www-data storage bootstrap/cache
             sudo chmod -R 775 storage bootstrap/cache
 
-            echo "Creating storage symbolic link..."
+            echo "****** Creating storage symbolic link..."
             rm -rf public/storage
             php artisan storage:link
 
-            echo "Applying database migrations..."
+            echo "****** Applying database migrations..."
             php artisan migrate --force  #  DB 마이그레이션 실행
 
-            echo "Clearing cache..."
+            echo "****** Clearing cache..."
             php artisan config:clear  #  설정 캐시 삭제
             php artisan cache:clear   #  애플리케이션 캐시 삭제
             # php artisan queue:restart #  큐 작업 재시작
 
-            echo "Restarting Nginx..."
+            echo "****** Restarting Nginx..."
             sudo systemctl restart nginx  # Nginx 웹 서버 재시작
           EOF
         # 오라클 클라우드 서버에 SSH 로 접속 후 배포 명령어 실행
